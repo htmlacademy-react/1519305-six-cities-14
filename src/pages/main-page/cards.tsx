@@ -1,13 +1,13 @@
-type CardValueProps = {
+type CardsProps = {
   img: string;
   premiumMark?: string;
   pricePerNight: number;
-  styleWidth: number;
+  ratingWidth: number;
   cardName: string;
   cardType: string;
 }
 
-function Card ({img, premiumMark, pricePerNight, styleWidth, cardName, cardType}: CardValueProps): JSX.Element {
+function Card ({img, premiumMark, pricePerNight, ratingWidth, cardName, cardType}: CardsProps): JSX.Element {
   return (
     <article className="cities__card place-card">
       <div className="place-card__mark">
@@ -35,7 +35,8 @@ function Card ({img, premiumMark, pricePerNight, styleWidth, cardName, cardType}
           <div className="place-card__stars rating__stars">
             <span
               style={{
-                width: `${styleWidth}%`}}
+                width: `${ratingWidth}%`
+              }}
             >
             </span>
             <span className="visually-hidden">Rating</span>
