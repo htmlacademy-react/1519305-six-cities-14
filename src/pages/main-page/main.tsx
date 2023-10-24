@@ -12,7 +12,7 @@ function Main ({offersCount}: OfferProps): JSX.Element {
           <div className="header__wrapper">
             <div className="header__left">
               <a className="header__logo-link header__logo-link--active">
-                <img className="header__logo" src="img/logo.svg" alt="6 cities logo" width="81" height="41"/>
+                <img className="header__logo" src="img/logo.svg" alt="6 cities logo" width={81} height={41}/>
               </a>
             </div>
             <nav className="header__nav">
@@ -95,11 +95,11 @@ function Main ({offersCount}: OfferProps): JSX.Element {
                 </ul>
               </form>
               <div className="cities__places-list places__list tabs__content">
-                <Card img="img/apartment-01.jpg" premiumMark='Premium' pricePerNight={120} styleWidth={80} cardName='Beautiful &amp; luxurious apartment at great location' cardType='Apartment'/>
-                <Card img="img/room.jpg" pricePerNight={80} styleWidth={80} cardName='Wood and stone place' cardType='Room'/>
-                <Card img="img/apartment-02.jpg" pricePerNight={132} styleWidth={80} cardName='Canal View Prinsengracht' cardType='Apartment'/>
-                <Card img="img/apartment-03.jpg" pricePerNight={180} styleWidth={100} cardName='Nice, cozy, warm big bed apartment' cardType='Apartment'/>
-                <Card img="img/room.jpg" pricePerNight={80} styleWidth={80} cardName='Wood and stone place' cardType='Room'/>
+                <Card img="img/apartment-01.jpg" premiumMark='Premium' pricePerNight={120} ratingWidth={80} cardName='Beautiful &amp; luxurious apartment at great location' cardType='Apartment'/>
+                <Card img="img/room.jpg" pricePerNight={80} ratingWidth={80} cardName='Wood and stone place' cardType='Room'/>
+                <Card img="img/apartment-02.jpg" pricePerNight={132} ratingWidth={80} cardName='Canal View Prinsengracht' cardType='Apartment'/>
+                <Card img="img/apartment-03.jpg" pricePerNight={180} ratingWidth={100} cardName='Nice, cozy, warm big bed apartment' cardType='Apartment'/>
+                <Card img="img/room.jpg" pricePerNight={80} ratingWidth={80} cardName='Wood and stone place' cardType='Room'/>
               </div>
             </section>
             <div className="cities__right-section">
