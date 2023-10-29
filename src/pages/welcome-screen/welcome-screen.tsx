@@ -1,35 +1,24 @@
-import Card from './cards';
+import { Helmet } from 'react-helmet-async';
+import Logo from '../../components/logo/logo';
+import User from '../../components/user/user';
+import Sign from '../../components/sign/sign';
+import PlaceCardList from '../../components/place-card-list/place-card-list';
+import { PagesProps } from '../pages-props.type';
 
-type OfferProps = {
-  offersCount: number;
-}
-
-function Main ({offersCount}: OfferProps): JSX.Element {
+function WelcomeScreen({placesCount, offers}: PagesProps): JSX.Element {
   return (
     <div className="page page--gray page--main">
+      <Helmet>
+        <title>Шесть городов. Главная страница</title>
+      </Helmet>
       <header className="header">
         <div className="container">
           <div className="header__wrapper">
-            <div className="header__left">
-              <a className="header__logo-link header__logo-link--active">
-                <img className="header__logo" src="img/logo.svg" alt="6 cities logo" width={81} height={41}/>
-              </a>
-            </div>
+            <Logo />
             <nav className="header__nav">
               <ul className="header__nav-list">
-                <li className="header__nav-item user">
-                  <a className="header__nav-link header__nav-link--profile" href="#">
-                    <div className="header__avatar-wrapper user__avatar-wrapper">
-                    </div>
-                    <span className="header__user-name user__name">Oliver.conner@gmail.com</span>
-                    <span className="header__favorite-count">3</span>
-                  </a>
-                </li>
-                <li className="header__nav-item">
-                  <a className="header__nav-link" href="#">
-                    <span className="header__signout">Sign out</span>
-                  </a>
-                </li>
+                <User />
+                <Sign />
               </ul>
             </nav>
           </div>
@@ -78,11 +67,11 @@ function Main ({offersCount}: OfferProps): JSX.Element {
           <div className="cities__places-container container">
             <section className="cities__places places">
               <h2 className="visually-hidden">Places</h2>
-              <b className="places__found">{offersCount} places to stay in Amsterdam</b>
+              <b className="places__found">{placesCount} places to stay in Amsterdam</b>
               <form className="places__sorting" action="#" method="get">
                 <span className="places__sorting-caption">Sort by</span>
                 <span className="places__sorting-type" tabIndex={0}>
-                      Popular
+                  Popular
                   <svg className="places__sorting-arrow" width="7" height="4">
                     <use xlinkHref="#icon-arrow-select"></use>
                   </svg>
@@ -94,13 +83,7 @@ function Main ({offersCount}: OfferProps): JSX.Element {
                   <li className="places__option" tabIndex={0}>Top rated first</li>
                 </ul>
               </form>
-              <div className="cities__places-list places__list tabs__content">
-                <Card img="img/apartment-01.jpg" premiumMark='Premium' pricePerNight={120} ratingWidth={80} cardName='Beautiful &amp; luxurious apartment at great location' cardType='Apartment'/>
-                <Card img="img/room.jpg" pricePerNight={80} ratingWidth={80} cardName='Wood and stone place' cardType='Room'/>
-                <Card img="img/apartment-02.jpg" pricePerNight={132} ratingWidth={80} cardName='Canal View Prinsengracht' cardType='Apartment'/>
-                <Card img="img/apartment-03.jpg" pricePerNight={180} ratingWidth={100} cardName='Nice, cozy, warm big bed apartment' cardType='Apartment'/>
-                <Card img="img/room.jpg" pricePerNight={80} ratingWidth={80} cardName='Wood and stone place' cardType='Room'/>
-              </div>
+              <PlaceCardList offers={offers}/>
             </section>
             <div className="cities__right-section">
               <section className="cities__map map"></section>
@@ -112,4 +95,4 @@ function Main ({offersCount}: OfferProps): JSX.Element {
   );
 }
 
-export default Main;
+export default WelcomeScreen;
