@@ -4,9 +4,13 @@ import User from '../../components/user/user';
 import Sign from '../../components/sign/sign';
 import PlaceCard from '../../components/place-card/place-card';
 import CommentForm from '../../components/comment-form/comment-form';
-import { PagesProps } from '../pages-props.type';
+import { Offer } from '../../types/offer';
 
-function OfferScreen({offers}: PagesProps):JSX.Element {
+type OfferScreenProps = {
+  offers: Offer[];
+}
+
+function OfferScreen({offers}: OfferScreenProps):JSX.Element {
   return (
     <div className="page">
       <Helmet>
