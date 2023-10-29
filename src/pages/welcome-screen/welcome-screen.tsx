@@ -3,14 +3,9 @@ import Logo from '../../components/logo/logo';
 import User from '../../components/user/user';
 import Sign from '../../components/sign/sign';
 import PlaceCardList from '../../components/place-card-list/place-card-list';
-import { Offer } from '../../types/offer';
+import { PagesProps } from '../pages-props.type';
 
-type WelcomeScreenProps = {
-    placesCount: number;
-    offers: Offer[];
-}
-
-function WelcomeScreen({placesCount, offers}: WelcomeScreenProps): JSX.Element {
+function WelcomeScreen({placesCount, offers}: PagesProps): JSX.Element {
   return (
     <div className="page page--gray page--main">
       <Helmet>

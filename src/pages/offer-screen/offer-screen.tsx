@@ -4,13 +4,9 @@ import User from '../../components/user/user';
 import Sign from '../../components/sign/sign';
 import PlaceCard from '../../components/place-card/place-card';
 import CommentForm from '../../components/comment-form/comment-form';
-import { Offer } from '../../types/offer';
+import { PagesProps } from '../pages-props.type';
 
-type OfferScreenProps = {
-  offers: Offer[];
-}
-
-function OfferScreen({offers}: OfferScreenProps):JSX.Element {
+function OfferScreen({offers}: PagesProps):JSX.Element {
   return (
     <div className="page">
       <Helmet>
@@ -170,6 +166,7 @@ function OfferScreen({offers}: OfferScreenProps):JSX.Element {
                         <div className="reviews__stars rating__stars">
                           <span style={{
                             width: '80%'
+
                           }}
                           >
                           </span>

@@ -8,7 +8,7 @@ type PlaceCardProps = {
 }
 
 function PlaceCard({offer}: PlaceCardProps): JSX.Element {
-  const {isPremium, previewImage, price, title, type, id} = offer;
+  const {isPremium, previewImage, price, title, type, id, rating} = offer;
 
   const [/*placeCard*/, setActivePlaceCard] = useState('');
   /*       ↑       */
@@ -43,7 +43,7 @@ function PlaceCard({offer}: PlaceCardProps): JSX.Element {
         <div className="place-card__rating rating">
           <div className="place-card__stars rating__stars">
             <span style={{
-              width: '80%',
+              width: `${(rating * 100) / 5}%`,
             }}
             >
             </span>
