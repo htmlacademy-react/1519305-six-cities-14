@@ -22,14 +22,14 @@ export const offers: Offer[] = [
     isFavorite: true,
     isPremium: false,
     rating: 4,
-    previewImage: 'https://14.react.pages.academy/static/offer//14.jpg',
+    previewImage: 'https://14.react.pages.academy/static/offer/14.jpg',
   },
   {
     id: 'e3274362-f06e-4870-ab15-a08b9163ea63',
     title: 'Canal View Prinsengracht',
     type: 'hotel',
     price: 203,
-    previewImage: 'https://14.react.pages.academy/static/offer//12.jpg',
+    previewImage: 'https://14.react.pages.academy/static/offer/12.jpg',
     city: {
       name: 'Amsterdam',
       location: {
@@ -52,7 +52,7 @@ export const offers: Offer[] = [
     title: 'The house among olive ',
     type: 'apartment',
     price: 348,
-    previewImage: 'https://14.react.pages.academy/static/offer//17.jpg',
+    previewImage: 'https://14.react.pages.academy/static/offer/17.jpg',
     city: {
       name: 'Amsterdam',
       location: {
@@ -95,38 +95,47 @@ export const offers: Offer[] = [
   },
 ];
 
-export const offersCards: OfferCard[] = [
-  {
-    id: '6af6f711-c28d-4121-82cd-e0b462a27f00',
-    title: 'Beautiful & luxurious studio at great location',
-    type: 'apartment',
-    price: 120,
-    city: {
-      name: 'Amsterdam',
-      location: {
-        latitude: 52.35514938496378,
-        longitude: 4.673877537499948,
-        zoom: 8,
-      },
-    },
+export const offerFullCard: OfferCard = {
+  id: '6af6f711-c28d-4121-82cd-e0b462a27f00',
+  title: 'Beautiful & luxurious studio at great location',
+  type: 'apartment',
+  price: 120,
+  city: {
+    name: 'Amsterdam',
     location: {
       latitude: 52.35514938496378,
       longitude: 4.673877537499948,
       zoom: 8,
     },
-    isFavorite: false,
-    isPremium: false,
-    rating: 4,
-    description:
-      'A quiet cozy and picturesque that hides behind a a river by the unique lightness of Amsterdam.',
-    bedrooms: 3,
-    goods: ['Heating'],
-    host: {
-      name: 'Oliver Conner',
-      avatarUrl: 'https://url-to-image/image.png',
-      isPro: false,
-    },
-    images: ['https://url-to-image/image.png'],
-    maxAdults: 4,
   },
-];
+  location: {
+    latitude: 52.35514938496378,
+    longitude: 4.673877537499948,
+    zoom: 8,
+  },
+  isFavorite: false,
+  isPremium: false,
+  rating: 4,
+  description:
+    'A quiet cozy and picturesque that hides behind a a river by the unique lightness of Amsterdam. Discover daily local life in city center, friendly neighborhood, clandestine casino, karaoke, old-style artisans, art gallery and artist studio downstairs.',
+  bedrooms: 3,
+  goods: [
+    'Washing machine',
+    'Cable TV',
+    'Air conditioning'
+  ],
+  host: {
+    name: 'Oliver Conner',
+    avatarUrl: 'https://url-to-image/image.png',
+    isPro: false,
+  },
+  images: [
+    'https://14.react.pages.academy/static/offer/8.jpg',
+    'https://14.react.pages.academy/static/offer/16.jpg',
+    'https://14.react.pages.academy/static/offer/3.jpg',
+    'https://14.react.pages.academy/static/offer/19.jpg',
+    'https://14.react.pages.academy/static/offer/12.jpg',
+    'https://14.react.pages.academy/static/offer/15.jpg'
+  ],
+  maxAdults: 4,
+};
