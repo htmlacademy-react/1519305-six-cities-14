@@ -170,6 +170,7 @@ function OfferScreen({offers}: OfferScreenProps):JSX.Element {
                         <div className="reviews__stars rating__stars">
                           <span style={{
                             width: '80%'
+
                           }}
                           >
                           </span>

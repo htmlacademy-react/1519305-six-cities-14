@@ -5,13 +5,11 @@ type FavoritesCardProps = {
 }
 
 function FavoritesCard({offer}: FavoritesCardProps): JSX.Element {
-  const {isPremium, previewImage, price, title, type} = offer;
+  const {isPremium, previewImage, price, title, type, rating} = offer;
 
   return (
     <article className="favorites__card place-card">
-      {isPremium
-        ? <div className="place-card__mark"><span>Premium</span></div>
-        : null}
+      {isPremium && <div className="place-card__mark"><span>Premium</span></div>}
       <div className="favorites__image-wrapper place-card__image-wrapper">
         <a href="#">
           <img
@@ -49,7 +47,7 @@ function FavoritesCard({offer}: FavoritesCardProps): JSX.Element {
           <div className="place-card__stars rating__stars">
             <span
               style={{
-                width: '100%',
+                width: `${(rating * 100) / 5}%`,
               }}
             >
             </span>
