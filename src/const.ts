@@ -27,3 +27,8 @@ export const CITIES = [
   'Humburg',
   'Dusseldorf'
 ];
+
+export const DateFormat = {
+  DATE_FORMAT: 'YYYY-MM-DD',
+  REVIEW_DATE_FORMAT: 'MMMM YYYY',
+};
