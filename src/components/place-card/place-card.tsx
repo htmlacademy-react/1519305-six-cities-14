@@ -10,9 +10,9 @@ type PlaceCardProps = {
 function PlaceCard({offer}: PlaceCardProps): JSX.Element {
   const {isPremium, previewImage, price, title, type, id, rating} = offer;
 
-  const [/*placeCard*/, setActivePlaceCard] = useState('');
+  const [/*_*/, setActivePlaceCard] = useState('');
   /*       ↑       */
-  /*Линтер ругается на неиспользование переменной*/
+  /*Линтер все равно ругается на неиспользование переменной*/
   return (
     <article className="cities__card place-card"
       id={id}
