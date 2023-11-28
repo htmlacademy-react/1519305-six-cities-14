@@ -1,23 +1,19 @@
-import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Offer } from '../../types/offer';
 import { AppRoute } from '../../const';
 
 type PlaceCardProps = {
   offer: Offer;
+  onCardHover: (offer: Offer) => void;
 }
 
-function PlaceCard({offer}: PlaceCardProps): JSX.Element {
-  const {isPremium, previewImage, price, title, type, id, rating} = offer;
+function PlaceCard({offer, onCardHover}: PlaceCardProps): JSX.Element {
+  const {isPremium, previewImage, price, title, type, id} = offer;
 
-  const [/*_*/, setActivePlaceCard] = useState('');
-  /*       ↑       */
-  /*Линтер все равно ругается на неиспользование переменной*/
   return (
     <article className="cities__card place-card"
       id={id}
-      onMouseEnter={({currentTarget}) => setActivePlaceCard(currentTarget.id)}
-      onMouseLeave={() => setActivePlaceCard('')}
+      onMouseEnter={() => onCardHover(offer)}
     >
       {isPremium
         ? <div className="place-card__mark"><span>Premium</span></div>
@@ -43,7 +39,7 @@ function PlaceCard({offer}: PlaceCardProps): JSX.Element {
         <div className="place-card__rating rating">
           <div className="place-card__stars rating__stars">
             <span style={{
-              width: `${(rating * 100) / 5}%`,
+              width: '80%',
             }}
             >
             </span>
@@ -60,4 +56,3 @@ function PlaceCard({offer}: PlaceCardProps): JSX.Element {
 }
 
 export default PlaceCard;
-

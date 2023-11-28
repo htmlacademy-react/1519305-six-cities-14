@@ -1,7 +1,3 @@
-export const Setting = {
-  PlacesCount: 312,
-};
-
 export enum AppRoute {
   Main = '/',
   Login = '/login',
@@ -19,16 +15,17 @@ export const URL_MARKER_DEFAULT = 'https://assets.htmlacademy.ru/content/intensi
 
 export const URL_MARKER_CURRENT = 'https://assets.htmlacademy.ru/content/intensive/javascript-1/demo/interactive-map/main-pin.svg';
 
-export const CITIES = [
-  'Paris',
-  'Colognne',
-  'Brussels',
-  'Amsterdam',
-  'Humburg',
-  'Dusseldorf'
-];
+export const CITIES = ['Paris', 'Cologne', 'Brussels', 'Amsterdam', 'Hamburg', 'Dusseldorf'];
 
 export const DateFormat = {
   DATE_FORMAT: 'YYYY-MM-DD',
   REVIEW_DATE_FORMAT: 'MMMM YYYY',
 };
+
+export enum SortingType {
+  Popular = 'Popular',
+  PriceLow = 'Price: low to high',
+  PriceHigh = 'Price: high to low',
+  TopRated = 'Top rated first',
+}
+
