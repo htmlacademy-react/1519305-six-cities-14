@@ -1,19 +1,23 @@
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Offer } from '../../types/offer';
 import { AppRoute } from '../../const';
 
 type PlaceCardProps = {
   offer: Offer;
-  onCardHover: (offer: Offer) => void;
 }
 
-function PlaceCard({offer, onCardHover}: PlaceCardProps): JSX.Element {
+function PlaceCard({offer}: PlaceCardProps): JSX.Element {
   const {isPremium, previewImage, price, title, type, id} = offer;
 
+  const [/*placeCard*/, setActivePlaceCard] = useState('');
+  /*       ↑       */
+  /*Линтер ругается на неиспользование переменной*/
   return (
     <article className="cities__card place-card"
       id={id}
-      onMouseEnter={() => onCardHover(offer)}
+      onMouseEnter={({currentTarget}) => setActivePlaceCard(currentTarget.id)}
+      onMouseLeave={() => setActivePlaceCard('')}
     >
       {isPremium
         ? <div className="place-card__mark"><span>Premium</span></div>
