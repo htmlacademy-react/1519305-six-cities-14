@@ -1,19 +1,21 @@
 import { Navigate } from 'react-router-dom';
-import { AppRoute, AuthorizationStatus } from '../../const';
+import { AuthStatus } from '../../const';
+import { AppRoute } from '../../const';
+import Spinner from '../spinner/spinner';
 
 type PrivateRouteProps = {
-    authorizationStatus: AuthorizationStatus;
-    children: JSX.Element;
-  }
-
-function PrivateRoute(props: PrivateRouteProps): JSX.Element {
-  const {authorizationStatus, children} = props;
-
-  return (
-    authorizationStatus === AuthorizationStatus.Auth
-      ? children
-      : <Navigate to={AppRoute.Login} />
-  );
+  authorizationStatus: AuthStatus;
+  children: JSX.Element;
 }
 
-export default PrivateRoute;
+export default function PrivateRoute(props: PrivateRouteProps): JSX.Element {
+  const { authorizationStatus, children } = props;
+
+  return (
+    <>
+      {authorizationStatus === AuthStatus.Unknown && <Spinner></Spinner>}
+      {authorizationStatus === AuthStatus.Auth && children}
+      {authorizationStatus === AuthStatus.NoAuth && <Navigate to={AppRoute.Login}></Navigate>}
+    </>
+  );
+}

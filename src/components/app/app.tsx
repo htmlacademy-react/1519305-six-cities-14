@@ -1,54 +1,49 @@
-import { Route, BrowserRouter, Routes } from 'react-router-dom';
+import { Route, Routes } from 'react-router-dom';
 import { HelmetProvider } from 'react-helmet-async';
-import { AppRoute, AuthorizationStatus } from '../../const';
-import WelcomeScreen from '../../pages/welcome-screen/welcome-screen';
-import LoginScreen from '../../pages/login-screen/login-screen';
-import FavoritesScreen from '../../pages/favorites-screen/favorites-screen';
-import OfferScreen from '../../pages/offer-screen/offer-screen';
-import NotFoundScreen from '../../pages/not-found-screen/not-found-screen';
+import { useSelector } from 'react-redux';
+import { ToastContainer } from 'react-toastify';
+import { getAuthorizationStatus } from '../../store/autorization-status-data/selectors';
+import 'react-toastify/dist/ReactToastify.css';
+import { AppRoute } from '../../const';
+import HomePage from '../../pages/home-page/home-page';
+import ErrorPage from '../../pages/error-page/error-page';
+import FavoritesPage from '../../pages/favorites-page/favorites-page';
+import LoginPage from '../../pages/login-page/login-page';
+import OfferPage from '../../pages/offer-page/offer-page';
 import PrivateRoute from '../private-route/private-route';
-import { Offer, OfferCard } from '../../types/offer';
-import { Review } from '../../types/reviews';
 
-type AppProps = {
-  offers: Offer[];
-  offerFullCard: OfferCard;
-  reviews: Review[];
-  cities: string[];
-};
-
-function App(props: AppProps): JSX.Element {
-  const {offers, offerFullCard, reviews, cities} = props;
+function App(): JSX.Element {
+  const authorizationStatus = useSelector(getAuthorizationStatus);
 
   return (
     <HelmetProvider>
-      <BrowserRouter>
-        <Routes>
-          <Route
-            path={AppRoute.Main}
-            element={
-              <WelcomeScreen
-                offers={offers}
-                cities={cities}
-              />
-            }
-          />
-          <Route path={AppRoute.Login} element={<LoginScreen />} />
-          <Route
-            path={AppRoute.Favotites}
-            element={
-              <PrivateRoute authorizationStatus={AuthorizationStatus.Auth}>
-                <FavoritesScreen offers={offers} />
-              </PrivateRoute>
-            }
-          />
-          <Route
-            path={AppRoute.Offer}
-            element={<OfferScreen offers={offers} offerFullCard={offerFullCard} reviews={reviews} />}
-          />
-          <Route path="*" element={<NotFoundScreen />} />
-        </Routes>
-      </BrowserRouter>
+      <Routes>
+        <Route
+          path={AppRoute.Main}
+          element={<HomePage />}
+        />
+        <Route
+          path={AppRoute.Favorites}
+          element={
+            <PrivateRoute authorizationStatus={authorizationStatus}>
+              <FavoritesPage />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path={AppRoute.Login}
+          element={<LoginPage />}
+        />
+        <Route
+          path={`${AppRoute.Offer}:id`}
+          element={<OfferPage />}
+        />
+        <Route
+          path='*'
+          element={<ErrorPage />}
+        />
+      </Routes>
+      <ToastContainer />
     </HelmetProvider>
   );
 }
