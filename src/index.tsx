@@ -1,9 +1,14 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
+import { Provider } from 'react-redux';
+import { store } from './store';
+import { fetchOffersAction, checkAuthAction } from './store/api-actions';
+import browserHistory from './browser-history';
+import HistoryRouter from './components/history-router/history-router';
 import App from './components/app/app';
-import { Setting } from './const';
-import { offers, offerFullCard } from './mocks/offers';
-import { reviews } from './mocks/reviews';
+
+store.dispatch(fetchOffersAction());
+store.dispatch(checkAuthAction());
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
@@ -11,11 +16,10 @@ const root = ReactDOM.createRoot(
 
 root.render(
   <React.StrictMode>
-    <App
-      placesCount={Setting.PlacesCount}
-      offers={offers}
-      offerFullCard={offerFullCard}
-      reviews={reviews}
-    />
+    <Provider store={store}>
+      <HistoryRouter history={browserHistory}>
+        <App />
+      </HistoryRouter>
+    </Provider>
   </React.StrictMode>
 );
