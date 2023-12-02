@@ -15,5 +15,3 @@ export const redirect: Middleware<unknown, Reducer> =
 
         return next(action);
       };
-
-      //
