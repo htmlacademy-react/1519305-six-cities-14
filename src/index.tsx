@@ -1,25 +1,23 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
+import { App } from './components/app/app';
 import { Provider } from 'react-redux';
 import { store } from './store';
-import { fetchOffersAction, checkAuthAction } from './store/api-actions';
-import browserHistory from './browser-history';
-import HistoryRouter from './components/history-router/history-router';
-import App from './components/app/app';
-
-store.dispatch(fetchOffersAction());
-store.dispatch(checkAuthAction());
+import { checkAuthStatus, loadOffers } from './store/async-actions';
+import { ErrorMessage } from './components/error-message/error-message';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
 
+store.dispatch(checkAuthStatus());
+store.dispatch(loadOffers());
+
 root.render(
   <React.StrictMode>
     <Provider store={store}>
-      <HistoryRouter history={browserHistory}>
-        <App />
-      </HistoryRouter>
+      <ErrorMessage />
+      <App />
     </Provider>
   </React.StrictMode>
 );

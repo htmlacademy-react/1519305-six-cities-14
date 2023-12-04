@@ -1,118 +1,79 @@
-import { Link, useNavigate } from 'react-router-dom';
-import { useAppDispatch } from '../../hooks';
-import { AppRoute, AuthStatus } from '../../const';
-import { Offer } from '../../types';
-import { getRating } from '../../utils';
-import { useSelector } from 'react-redux';
-import { getAuthorizationStatus } from '../../store/autorization-status-data/selectors';
-import { addFavoritesAction, removeFavoritesAction } from '../../store/api-actions';
-import { updateOffers } from '../../store/offers-data/offers-data';
-import { capitalizeFirstLetter } from '../../utils';
+import { Link } from 'react-router-dom';
+import { AppRoute } from '../../const';
+import { TOffer } from '../../types/offer';
+import { RatingMain } from '../rating-main/rating-main';
+import { MainFavoriteButton } from '../main-favorite-button/main-favorite-button';
+import { TSize } from '../../types/const';
+import { capitalizeFirstLetter } from '../../utils/utils';
 
-type OfferCardProps = {
-  offer: Offer;
-  cardType?: string;
-  onUpdateActiveOffer?: (offer: Offer) => void;
-  onClearHoveredOffer?: () => void;
-  onToggleFavoriteOffer: () => void;
-}
+export type TOfferCardProxyProps = Omit<
+  TOfferCardProps,
+  'className' | 'imageSize'
+>;
 
-function getLinkToOffer(id: number) {
-  return `${AppRoute.Offer}${id}`;
-}
+export type TOfferCardProps = {
+  offer: TOffer;
+  className: string;
+  imageSize: TSize;
+  onOfferHover?: (offerId: string | null) => void;
+};
 
-function OfferCard({ offer, cardType, onUpdateActiveOffer, onClearHoveredOffer, onToggleFavoriteOffer }: OfferCardProps): JSX.Element {
-  const navigate = useNavigate();
-  const dispatch = useAppDispatch();
-  const authorizationStatus = useSelector(getAuthorizationStatus);
-
-  function handleMouseHover(): void {
-    if(onUpdateActiveOffer) {
-      onUpdateActiveOffer(offer);
-    }
-  }
-
-  function handleMouseOut(): void {
-    if(onClearHoveredOffer) {
-      onClearHoveredOffer();
-    }
-  }
-
-  const toggleFavorite = async (favoriteOffer: Offer) => {
-    if (authorizationStatus !== AuthStatus.Auth) {
-      navigate(AppRoute.Login);
-      return;
-    }
-
-    const { isFavorite } = favoriteOffer;
-    const { payload } = isFavorite ? await dispatch(removeFavoritesAction(favoriteOffer)) : await dispatch(addFavoritesAction(favoriteOffer));
-    dispatch(updateOffers(payload as Offer));
-    onToggleFavoriteOffer();
-  };
+const OfferCard = ({
+  offer,
+  className = '',
+  imageSize,
+  onOfferHover,
+}: TOfferCardProps) => {
+  const {
+    id,
+    title,
+    type,
+    price,
+    previewImage,
+    isFavorite,
+    isPremium,
+    rating,
+  } = offer;
 
   return (
     <article
-      data-testid="offer__card__id"
-      onMouseOver={handleMouseHover}
-      onMouseOut={handleMouseOut}
-      className={
-        `place-card 
-        ${cardType === 'city' ? 'cities__card' : ''}
-        ${cardType === 'favorite' ? 'favorites__card' : ''}
-        ${cardType === 'near-places' ? 'near-places__card' : ''}`
-      }
+      className={`${className}__card place-card`}
+      onMouseEnter={() => onOfferHover?.(id)}
+      onMouseLeave={() => onOfferHover?.(null)}
+      data-testid="offer-card"
     >
-      <div className="visually-hidden">Offer card</div>
-      {offer.isPremium && (
+      {isPremium && (
         <div className="place-card__mark">
           <span>Premium</span>
         </div>
       )}
-      <div className={
-        `place-card__image-wrapper 
-        ${cardType === 'city' ? 'cities__image-wrapper' : ''} 
-        ${cardType === 'favorite' ? 'favorites__image-wrapper' : ''}
-        ${cardType === 'near-places' ? 'near-places__image-wrapper' : ''}`
-      }
-      >
-        <img
-          src={offer.previewImage}
-          alt="Place image"
-          className={`place-card__image ${cardType === 'favorite' ? 'favorites__image' : ''}`}
-        />
+
+      <div className={`${className}__image-wrapper place-card__image-wrapper`}>
+        <a href="#">
+          <img
+            className="place-card__image"
+            src={previewImage}
+            alt="Place image"
+            {...imageSize}
+          />
+        </a>
       </div>
-      <div className={`place-card__info ${cardType === 'favorite' ? 'favorites__card-info' : ''}`}>
+      <div className={`${className}__card-info place-card__info`}>
         <div className="place-card__price-wrapper">
           <div className="place-card__price">
-            <b className="place-card__price-value">&euro;{offer.price}</b>
+            <b className="place-card__price-value">&euro;{price}</b>
             <span className="place-card__price-text">&#47;&nbsp;night</span>
           </div>
-          <button
-            type="button"
-            className={`place-card__bookmark-button button ${offer.isFavorite && authorizationStatus === AuthStatus.Auth ? 'place-card__bookmark-button--active' : ''}`}
-            onClick={ () => {
-              toggleFavorite(offer);
-            } }
-          >
-            <svg className="place-card__bookmark-icon" width="18" height="19">
-              <use xlinkHref="#icon-bookmark"></use>
-            </svg>
-            <span className="visually-hidden">To bookmarks</span>
-          </button>
+          <MainFavoriteButton offerId={id} isFavorite={isFavorite} />
         </div>
-        <div className="place-card__rating rating">
-          <div className="place-card__stars rating__stars">
-            <span style={{width: getRating(offer.rating)}}></span>
-            <span className="visually-hidden">Rating</span>
-          </div>
-        </div>
+        <RatingMain ratingValue={rating} />
         <h2 className="place-card__name">
-          <Link to={getLinkToOffer(offer.id)}>{offer.title}</Link>
+          <Link to={`${AppRoute.Offer}/${id}`}>{title}</Link>
         </h2>
-        <p className="place-card__type">{capitalizeFirstLetter(offer.type)}</p>
+        <p className="place-card__type">{capitalizeFirstLetter(type)}</p>
       </div>
     </article>
   );
-}
+};
 
-export default OfferCard;
+export { OfferCard };

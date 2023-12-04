@@ -1,91 +1,59 @@
-import { useMemo } from 'react';
-import { Helmet } from 'react-helmet-async';
-import { useSelector } from 'react-redux';
-import { Link } from 'react-router-dom';
-import { Offer } from '../../types';
-import { useAppDispatch } from '../../hooks';
-import { AppRoute } from '../../const';
-import { fetchFavoritesAction } from '../../store/api-actions';
-import { getFavorites } from '../../store/favorites-data/selectors';
-import Header from '../../components/header/header';
-import OfferCards from '../../components/offer-cards/offer-cards';
+import { useEffect } from 'react';
+import { Footer } from '../../components/footer/footer';
+import { Header } from '../../components/header/header';
+import { UserMenu } from '../../components/user-menu/user-menu';
+import { useAppDispatch } from '../../hooks/use-app-dispatch';
+import { useAppSelector } from '../../hooks/use-app-selector';
+import {
+  getFavorites,
+  getFavoritesLoadingStatus,
+} from '../../store/favorites-process/selectors';
+import { Favorites } from '../favorites/favorites';
+import { loadFavorites } from '../../store/async-actions';
+import { AuthStatus, LoadingStatus } from '../../const';
+import { Spinner } from '../../components/spinner/spinner';
+import { FavoritesEmpty } from '../favorites-empty/favorites-empty';
+import cn from 'classnames';
+import { getAuthStatus } from '../../store/user-process/selectors';
 
-function FavoritesPage(): JSX.Element {
+const FavoritesPage = () => {
   const dispatch = useAppDispatch();
-  const favoritesOffers = useSelector(getFavorites);
+  const authStatus = useAppSelector(getAuthStatus);
+  const favorites = useAppSelector(getFavorites);
+  const loadingStatus = useAppSelector(getFavoritesLoadingStatus);
 
-  const computedFavoriteOffers = useMemo(() => {
-    const offers: Record<string, Offer[]> = {};
+  useEffect(() => {
+    let isMounted = true;
 
-    favoritesOffers.forEach((offer: Offer) => {
-      if (offers[offer.city.name] === undefined) {
-        offers[offer.city.name] = [offer];
-      } else {
-        offers[offer.city.name] = [ ...offers[offer.city.name], offer];
-      }
-    });
+    if (isMounted && authStatus === AuthStatus.Auth) {
+      dispatch(loadFavorites());
+    }
 
-    return offers;
-  }, [favoritesOffers]);
+    return () => {
+      isMounted = false;
+    };
+  }, [dispatch, authStatus]);
 
-  const updateFavorites = () => {
-    dispatch(fetchFavoritesAction());
-  };
+  if (loadingStatus === LoadingStatus.Loading) {
+    return <Spinner />;
+  }
 
   return (
-    <div className="page">
-      <Helmet>
-        <title>Проект 6 городов - избранное</title>
-      </Helmet>
-      <Header />
-
-      <main
-        className={
-          `page__main page__main--favorites
-          ${favoritesOffers.length === 0 ? 'page__main--favorites-empty' : ''}`
-        }
-      >
-        <div className="visually-hidden">Favorites offers</div>
-        <div className="page__favorites-container container">
-          {favoritesOffers.length > 0 &&
-            <section className="favorites">
-              <h1 className="favorites__title">Saved listing</h1>
-              <ul className="favorites__list">
-                {Object.keys(computedFavoriteOffers).map((city) =>
-                  (
-                    <li key={city} className="favorites__locations-items">
-                      <div className="favorites__locations locations locations--current">
-                        <div className="locations__item">
-                          <span className="locations__item-link">
-                            <span>{city}</span>
-                          </span>
-                        </div>
-                      </div>
-                      <div className="favorites__places">
-                        <OfferCards offers={computedFavoriteOffers[city]} cardType="favorite" onHandleFavoriteToggling={updateFavorites} />
-                      </div>
-                    </li>
-                  ))}
-              </ul>
-            </section>}
-          {favoritesOffers.length === 0 && (
-            <section className="favorites favorites--empty">
-              <h1 className="visually-hidden">Favorites (empty)</h1>
-              <div className="favorites__status-wrapper">
-                <b className="favorites__status">Nothing yet saved.</b>
-                <p className="favorites__status-description">Save properties to narrow down search or plan your future trips.</p>
-              </div>
-            </section>
-          )}
-        </div>
-      </main>
-      <footer className="footer container">
-        <Link to={AppRoute.Main} className="footer__logo-link">
-          <img className="footer__logo" src="img/logo.svg" alt="6 cities logo" width="64" height="33" />
-        </Link>
-      </footer>
+    <div
+      className={`page ${cn({
+        'page--favorites-empty': !favorites.length,
+      })}`}
+    >
+      <Header>
+        <UserMenu />
+      </Header>
+      {(loadingStatus === LoadingStatus.Error || !favorites.length) && (
+        <FavoritesEmpty />
+      )}
+      {favorites.length > 0 && <Favorites favorites={favorites} />}
+      <Footer />
     </div>
   );
-}
+};
 
-export default FavoritesPage;
+export { FavoritesPage };

@@ -1,58 +1,142 @@
-import { Review } from './types';
+import {
+  TFavoriteButtonSize,
+  TOfferCardImageSize,
+  TReviewRating,
+} from './types/const';
 
-export enum AppRoute {
-  Main = '/',
+const ERROR_TIMEOUT = 3000;
+const DEFAULT_LOCATION = 'Paris';
+const MAX_OFFER_GALLERY_PICTURES = 6;
+const MAX_COMMENTS = 10;
+const MAX_NEAR_PLACES = 3;
+const REQUEST_TIMEOUT = 5000;
+const BASE_URL = 'https://14.design.pages.academy/six-cities';
+const BASE_MARKER_PATH = './markup/img/';
+const PATH_MARKER_DEFAULT = `${BASE_MARKER_PATH}pin.svg`;
+const PATH_MARKER_CURRENT = `${BASE_MARKER_PATH}pin-active.svg`;
+
+enum AppRoute {
   Login = '/login',
   Favorites = '/favorites',
-  Offer = '/offer/'
+  Offer = '/offer',
+  Root = '/',
+  NotFound = '*',
+  DevFavotites = '/dev-favorites',
+  DevOffer = '/dev-offer',
+  DevRoot = '/dev-root',
 }
 
-export enum AuthStatus {
+enum APIRoute {
+  Offers = '/offers',
+  Nearby = '/nearby',
+  Favorite = '/favorite',
+  Comments = '/comments',
+  Login = '/login',
+  Logout = '/logout',
+}
+
+enum AuthStatus {
   Auth = 'AUTH',
   NoAuth = 'NO_AUTH',
-  Unknown = 'UNKNOWN'
+  Unknown = 'UNKNOWN',
 }
 
-export const cities = [
+enum NameSpace {
+  Offers = 'OFFERS',
+  Offer = 'OFFER',
+  NearPlaces = 'NEAR_PLACES',
+  Favorites = 'FAVORITES',
+  Comments = 'COMMENTS',
+  User = 'USER',
+  App = 'APP',
+}
+
+enum OfferCardClassName {
+  Favorites = 'favorites',
+  Main = 'cities',
+  Near = 'near-places',
+}
+
+enum RatingClassName {
+  Main = 'place-card',
+  Offer = 'offer',
+  Reviews = 'reviews',
+}
+
+enum FavoriteButtonClassName {
+  Main = 'place-card',
+  Details = 'offer',
+}
+
+enum ReviewInfo {
+  MinCommentLength = 50,
+  MaxCommentLength = 300,
+}
+
+enum LoadingStatus {
+  Loading = 'loading',
+  Success = 'success',
+  Error = 'error',
+  Idle = 'idle',
+}
+
+const FAVORITE_BUTTON_SIZE: TFavoriteButtonSize = {
+  'place-card': { width: '18px', height: '19px' },
+  offer: { width: '31px', height: '33px' },
+};
+
+const REVIEW_RATINGS: TReviewRating[] = [
+  { ratingValue: 5, ratingText: 'perfect' },
+  { ratingValue: 4, ratingText: 'good' },
+  { ratingValue: 3, ratingText: 'not bad' },
+  { ratingValue: 2, ratingText: 'badly' },
+  { ratingValue: 1, ratingText: 'terribly' },
+];
+
+const OFFER_CARD_IMAGE_SIZE: TOfferCardImageSize = {
+  near: { width: 260, height: 200 },
+  favorites: { width: 150, height: 110 },
+  main: { width: 260, height: 200 },
+};
+
+const LOCATIONS: string[] = [
   'Paris',
   'Cologne',
   'Brussels',
   'Amsterdam',
   'Hamburg',
   'Dusseldorf',
-] as const;
+];
 
-export type CityName = typeof cities[number];
+const SORT_TYPES: string[] = [
+  'Popular',
+  'Price: low to high',
+  'Price: high to low',
+  'Top rated first',
+];
 
-export const enum MarkerUrl {
-  Default = 'src/static/pin.svg',
-  Active = 'src/static/pin-active.svg',
-}
-
-export enum NameSpace {
-  Offers = 'OFFERS',
-  City = 'CITY',
-  AuthorizationStatus = 'AUTORIZATION_STATUS',
-  User = 'USER',
-  Favorites = 'FAVORITES',
-}
-
-export enum SortingOption {
-  Popular = 'Popular',
-  PriceLowToHigh = 'Price: low to high',
-  PriceHighToLow = 'Price: high to low',
-  TopRatedFirst = 'Top rated first',
-}
-
-export const EMPTY_REVIEW: Review = {
-  rating: 0,
-  comment: '',
+export {
+  APIRoute,
+  AppRoute,
+  AuthStatus,
+  NameSpace,
+  OfferCardClassName,
+  RatingClassName,
+  ReviewInfo,
+  LoadingStatus,
+  FavoriteButtonClassName,
+  REVIEW_RATINGS,
+  PATH_MARKER_CURRENT,
+  PATH_MARKER_DEFAULT,
+  OFFER_CARD_IMAGE_SIZE,
+  MAX_NEAR_PLACES,
+  DEFAULT_LOCATION,
+  LOCATIONS,
+  SORT_TYPES,
+  BASE_URL,
+  REQUEST_TIMEOUT,
+  ERROR_TIMEOUT,
+  MAX_COMMENTS,
+  MAX_OFFER_GALLERY_PICTURES,
+  FAVORITE_BUTTON_SIZE,
 };
-
-export const ERROR_STATUS_CODE = 404;
-export const ERROR_ROUTE = '404';
-export const COMMENT_MIN_LENGTH = 50;
-export const COMMENT_MAX_LENGTH = 300;
-export const COMMENTS_MAX_QUANTITY = 10;
-export const OFFERS_NEARBY_MAX_QUANTITY = 3;
-export const PHOTOS_IN_GALLERY_MAX_QUANTITY = 6;

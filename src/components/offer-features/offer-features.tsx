@@ -1,19 +1,32 @@
-type OfferFeaturesProps = {
-  features: string[];
-}
+import { capitalizeFirstLetter, declension } from '../../utils/utils';
 
-export default function OfferFeatures({ features }: OfferFeaturesProps): JSX.Element {
+type TOfferFeaturesProps = {
+  features: {
+    type: string;
+    bedrooms: number;
+    maxAdults: number;
+  };
+};
+
+const BEDROOM_TITLES = 'bedroom|bedrooms|bedrooms';
+const ADULTS_TITLES = 'adult|adults|adults';
+
+const OfferFeatures = ({ features }: TOfferFeaturesProps) => {
+  const { type, bedrooms, maxAdults } = features;
+
   return (
-    <div className="offer__inside">
-      <h2 className="offer__inside-title">What&apos;s inside</h2>
-      <div className="visually-hidden">Offer features</div>
-      <ul className="offer__inside-list">
-        {features.map((feature) => (
-          <li key={feature} className="offer__inside-item">
-            {feature}
-          </li>
-        ))}
-      </ul>
-    </div>
+    <ul className="offer__features" data-testid="offer-features">
+      <li className="offer__feature offer__feature--entire">
+        {capitalizeFirstLetter(type)}
+      </li>
+      <li className="offer__feature offer__feature--bedrooms">
+        {bedrooms} {capitalizeFirstLetter(declension(bedrooms, BEDROOM_TITLES))}
+      </li>
+      <li className="offer__feature offer__feature--adults">
+        Max {maxAdults} {declension(maxAdults, ADULTS_TITLES)}
+      </li>
+    </ul>
   );
-}
+};
+
+export { OfferFeatures };
