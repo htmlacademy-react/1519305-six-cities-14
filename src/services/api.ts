@@ -1,7 +1,6 @@
 import axios, {
   AxiosError,
   AxiosInstance,
-  AxiosRequestConfig,
   AxiosResponse,
 } from 'axios';
 import { BASE_URL, REQUEST_TIMEOUT } from '../const';
@@ -25,15 +24,17 @@ const createApi = (): AxiosInstance => {
     timeout: REQUEST_TIMEOUT,
   });
 
-  api.interceptors.request.use((config: AxiosRequestConfig) => {
-    const token = getToken();
+  api.interceptors.request.use(
+    (config) => {
+      const token = getToken();
 
-    if (token && config.headers) {
-      config.headers['X-Token'] = token;
-    }
+      if (token && config.headers) {
+        config.headers['x-token'] = token;
+      }
 
-    return config;
-  });
+      return config;
+    },
+  );
 
   api.interceptors.response.use(
     (response) => response,
