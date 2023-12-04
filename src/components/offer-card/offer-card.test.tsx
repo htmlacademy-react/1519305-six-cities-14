@@ -1,19 +1,31 @@
 import { render, screen } from '@testing-library/react';
-import { withStore, withHistory } from '../../utils/mock-component';
-import { makeFakeStore, makeFakeOffer } from '../../utils/mocks';
-import OfferCard from './offer-card';
+import { AuthStatus } from '../../const';
+import { withRouter, withStore } from '../../utils/mock-components';
+import { makeFakeOffers } from '../../utils/mocks';
+import { OfferCard } from './offer-card';
 
 describe('Component: OfferCard', () => {
-  it('should render correctly', () => {
-    const fakeOffer = makeFakeOffer();
-    const fakeStore = makeFakeStore({});
-    const { withStoreComponent } = withStore(withHistory(<OfferCard offer={fakeOffer} onToggleFavoriteOffer={() => {}} />), fakeStore);
-    const offerCardId = 'offer__card__id';
+  it('should render correct', () => {
+    const offerCardTestId = 'offer-card';
+    const expectedProps = {
+      offer: makeFakeOffers()[0],
+      className: '',
+      imageSize: {
+        width: 20,
+        height: 20,
+      },
+      onOfferHover: (offerId: string | null): void => {
+        // eslint-disable-next-line no-console
+        console.log(offerId);
+      },
+    };
+    const { withStoreComponent } = withStore(<OfferCard {...expectedProps} />, {
+      USER: { userEmail: '', authStatus: AuthStatus.Auth },
+    });
+    const preparedComponent = withRouter(withStoreComponent);
 
-    render(withStoreComponent);
-    const listContainer = screen.getByTestId(offerCardId);
+    render(preparedComponent);
 
-    expect(screen.getByText('Offer card')).toBeInTheDocument();
-    expect(listContainer).toBeInTheDocument();
+    expect(screen.getByTestId(offerCardTestId)).toBeInTheDocument();
   });
 });

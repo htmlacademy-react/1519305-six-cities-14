@@ -1,15 +1,18 @@
 import { configureStore } from '@reduxjs/toolkit';
+import { createApi } from '../services/api';
+import { timeout } from './middlewares/timeout';
 import { rootReducer } from './root-reducer';
-import { createApi } from '../api/api';
 
-export const api = createApi();
+export const fetchData = createApi?.();
 
-export const store = configureStore({
+const store = configureStore({
   reducer: rootReducer,
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
       thunk: {
-        extraArgument: api,
+        extraArgument: fetchData,
       },
-    }),
+    }).concat(timeout),
 });
+
+export { store };

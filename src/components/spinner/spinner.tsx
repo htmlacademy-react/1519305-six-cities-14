@@ -1,13 +1,9 @@
-export default function Spinner(): JSX .Element {
-  return (
-    <div className="spinner-wrapper">
-      <div className="container">
-        <div className="spinner-inner">
-          <div className="spinner-text">
-            Loading...
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
+import styles from './spinner.module.css';
+
+const Spinner = () => (
+  <div className={styles['spinner']} data-testid="spinner">
+    <div className={styles['spinner__inner']}></div>
+  </div>
+);
+
+export { Spinner };

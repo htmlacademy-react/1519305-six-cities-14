@@ -1,19 +1,24 @@
-import { PHOTOS_IN_GALLERY_MAX_QUANTITY } from '../../const';
+import { memo } from 'react';
+import { MAX_OFFER_GALLERY_PICTURES } from '../../const';
 
-type OfferGalleryProps = {
-  picsUrls: string[];
-}
+type TOfferGalleryProps = {
+  images: string[];
+};
 
-export default function OfferGallery({ picsUrls }: OfferGalleryProps): JSX.Element {
-  return (
-    <div className="offer__gallery-container container">
-      <div className="offer__gallery">
-        {picsUrls.slice(0, PHOTOS_IN_GALLERY_MAX_QUANTITY).map((picUrl) => (
-          <div key={picUrl} className="offer__image-wrapper">
-            <img className="offer__image" src={picUrl} alt="Photo studio" />
-          </div>
-        ))}
+const Gallery = ({ images }: TOfferGalleryProps) => (
+  <div className="offer__gallery" data-testid="offer-gallery">
+    {images.slice(0, MAX_OFFER_GALLERY_PICTURES).map((image) => (
+      <div
+        key={image}
+        className="offer__image-wrapper"
+        data-testid="offer-gallery-image"
+      >
+        <img className="offer__image" src={image} alt="Photo studio" />
       </div>
-    </div>
-  );
-}
+    ))}
+  </div>
+);
+
+const OfferGallery = memo(Gallery);
+
+export { OfferGallery };
