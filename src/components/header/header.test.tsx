@@ -1,18 +1,52 @@
+import { withStore } from '../../utils/mock-components';
 import { render, screen } from '@testing-library/react';
-import { withStore, withHistory } from '../../utils/mock-component';
-import { makeFakeStore } from '../../utils/mocks';
-import Header from './header';
+import { withRouter } from '../../utils/mock-components';
+import { Header } from './header';
+import { UserMenu } from '../user-menu/user-menu';
+import { AuthStatus, LoadingStatus } from '../../const';
 
 describe('Component: Header', () => {
-  it('should render correctly', () => {
-    const fakeStore = makeFakeStore({});
-    const { withStoreComponent } = withStore(withHistory(<Header />), fakeStore);
-    const headerId = 'header__id';
+  it('should render correct', () => {
+    const headerTestId = 'header';
+    const logoLinkTestId = 'logo-link';
 
-    render(withStoreComponent);
-    const listContainer = screen.getByTestId(headerId);
+    const withRouterComponent = withRouter(<Header />);
 
-    expect(screen.getByText('Header')).toBeInTheDocument();
-    expect(listContainer).toBeInTheDocument();
+    render(withRouterComponent);
+
+    const header = screen.getByTestId(headerTestId);
+    const link = screen.getByTestId(logoLinkTestId);
+
+    expect(header).toContainElement(link);
+  });
+
+  it('should render correct with children passed', () => {
+    const headerTestId = 'header';
+    const logoLinkTestId = 'logo-link';
+    const userMenuTestId = 'user-menu';
+
+    const { withStoreComponent } = withStore(
+      <Header>
+        <UserMenu />
+      </Header>,
+      {
+        USER: { userEmail: '', authStatus: AuthStatus.Auth },
+        FAVORITES: {
+          favorites: [],
+          favoritesLoadingStatus: LoadingStatus.Success,
+        },
+      }
+    );
+
+    const withRouterComponent = withRouter(withStoreComponent);
+
+    render(withRouterComponent);
+
+    const header = screen.getByTestId(headerTestId);
+    const link = screen.getByTestId(logoLinkTestId);
+    const userMenu = screen.getByTestId(userMenuTestId);
+
+    expect(header).toContainElement(link);
+    expect(header).toContainElement(userMenu);
   });
 });

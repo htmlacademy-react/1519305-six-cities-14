@@ -1,79 +1,62 @@
-import leaflet from 'leaflet';
+import { useRef, useEffect } from 'react';
+import { Icon, Marker, layerGroup } from 'leaflet';
 import 'leaflet/dist/leaflet.css';
-import { useRef, useEffect, useMemo } from 'react';
-import { MarkerUrl } from '../../const';
-import { Offer, City } from '../../types';
-import useMap from '../../hooks/use-map';
+import { PATH_MARKER_DEFAULT, PATH_MARKER_CURRENT } from '../../const';
+import { TCity, TOffer } from '../../types/offer';
+import { useMap } from '../../hooks/use-map';
+import { TDetail } from '../../types/details';
 
-export type MapProps = {
-  offers: Offer[];
-  activeOffer: Offer;
-  hoveredOffer?: Offer | null;
-  isOfferPage?: boolean;
-  type: string;
-  isActiveOfferOrange?: boolean;
-}
+type MapProps = {
+  points: (TOffer | TDetail)[];
+  selectedPoint?: TOffer | TDetail;
+  city: TCity;
+};
 
-const defaultCustomIcon = leaflet.icon({
-  iconUrl: MarkerUrl.Default,
+const defaultCustomIcon = new Icon({
+  iconUrl: PATH_MARKER_DEFAULT,
   iconSize: [27, 39],
-  iconAnchor: [13, 39],
+  iconAnchor: [27, 39],
 });
 
-const currentCustomIcon = leaflet.icon({
-  iconUrl: MarkerUrl.Active,
+const currentCustomIcon = new Icon({
+  iconUrl: PATH_MARKER_CURRENT,
   iconSize: [27, 39],
-  iconAnchor: [13, 39],
+  iconAnchor: [27, 39],
 });
 
-export default function Map({ offers, activeOffer, hoveredOffer, isOfferPage, type, isActiveOfferOrange }: MapProps): JSX.Element {
-  const firstOffer = activeOffer;
-
-  const place: City = {
-    name: firstOffer.title,
-    location: {
-      latitude: firstOffer.city.location.latitude,
-      longitude: firstOffer.city.location.longitude,
-      zoom: firstOffer.city.location.zoom,
-    }
-  };
-
+const Map = ({ city, points, selectedPoint }: MapProps) => {
   const mapRef = useRef(null);
-  const map = useMap(mapRef, place);
-
-  const currentIconType = isActiveOfferOrange ? currentCustomIcon : defaultCustomIcon;
-  const city = useMemo(() => offers[0].city.name, [offers]);
+  const map = useMap(mapRef, city);
 
   useEffect(() => {
     if (map) {
-      map.eachLayer((layer: leaflet.Layer & { _icon?: unknown}) => {
-        if(layer._icon) {
-          layer.remove();
-        }
+      const markerLayer = layerGroup().addTo(map);
+      const { latitude, longitude, zoom } = city.location;
+
+      map.setView([latitude, longitude], zoom);
+
+      points.forEach((point) => {
+        const marker = new Marker({
+          lat: point.location.latitude,
+          lng: point.location.longitude,
+        });
+
+        marker
+          .setIcon(
+            selectedPoint && point.id === selectedPoint.id
+              ? currentCustomIcon
+              : defaultCustomIcon
+          )
+          .addTo(markerLayer);
       });
 
-      offers.forEach((offer) => {
-        leaflet.marker({
-          lat: offer.location.latitude,
-          lng: offer.location.longitude,
-        }, {
-          icon: ((offer.id === hoveredOffer?.id) || (isOfferPage && offer.id === activeOffer?.id)) ? currentIconType : defaultCustomIcon,
-        })
-          .addTo(map);
-      });
-
+      return () => {
+        map.removeLayer(markerLayer);
+      };
     }
-  }, [map, offers, activeOffer, isOfferPage, hoveredOffer, currentIconType]);
+  }, [map, city, points, selectedPoint]);
 
+  return <div style={{ height: '100%' }} ref={mapRef}></div>;
+};
 
-  useEffect(() => {
-    if (map) {
-      map.setView([activeOffer.city.location.latitude, activeOffer.city.location.longitude], activeOffer.city.location.zoom);
-    }
-  }, [city]);
-
-  return (
-    <section data-testid="map__id" ref={mapRef} className={`map ${type === 'city' ? 'cities__map' : 'offer__map'}`}>
-    </section>
-  );
-}
+export { Map };
